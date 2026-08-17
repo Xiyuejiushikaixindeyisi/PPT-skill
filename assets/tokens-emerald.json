@@ -1,0 +1,64 @@
+{
+  "theme": "emerald-slate",
+  "meta": {
+    "note": "Replace this file to re-brand. Keep the same keys; only change values. All colors are 6-digit hex without '#'.",
+    "swap_instructions": "To make a new theme, copy this file, change `theme`, palette, fonts, and logo, then pass --tokens <yourfile>.json to the scripts (or paste the values into the standalone prompt)."
+  },
+  "palette": {
+    "title": "0B3D2E",
+    "accent": "0E8F6E",
+    "container": "D5EFE6",
+    "nested": "E9F7F1",
+    "chevron_mid": "8FD3BD",
+    "neutral": "F0F0F2",
+    "text": "4A4A4B",
+    "muted": "6B7280",
+    "border_gray": "DDE4EF",
+    "border_blue": "6FC7AC",
+    "white": "FFFFFF"
+  },
+  "gantt_status": {
+    "done": "D5EFE6",
+    "active": "0E8F6E",
+    "not_started": "F0F0F2",
+    "milestone": "0B3D2E",
+    "today_line": "0E8F6E"
+  },
+  "font": {
+    "family": "Microsoft YaHei",
+    "fallbacks": [
+      "Noto Sans CJK SC",
+      "PingFang SC",
+      "SimHei",
+      "sans-serif"
+    ]
+  },
+  "type_scale_pt": {
+    "title": 24,
+    "container_title": 11,
+    "node_title": 9,
+    "body": 8,
+    "caption": 7.2,
+    "min": 7
+  },
+  "layout": {
+    "slide_w_in": 13.333,
+    "slide_h_in": 7.5,
+    "margin_in": 0.3,
+    "logo": {
+      "file": "logo-default.png",
+      "width_in": 1.5,
+      "aspect_w": 206,
+      "aspect_h": 48,
+      "corner": "bottom-right",
+      "pad_in": 0.24
+    }
+  },
+  "density": {
+    "min_ink_coverage_pct": 30,
+    "min_main_figure_height_ratio": 0.7,
+    "max_blank_square_in": 1.2,
+    "min_shapes_per_content_slide": 40,
+    "text_overflow_tolerance_pct": 3
+  }
+}

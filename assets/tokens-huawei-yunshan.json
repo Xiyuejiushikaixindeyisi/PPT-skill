@@ -1,0 +1,65 @@
+{
+  "theme": "huawei-yunshan-blue",
+  "meta": {
+    "note": "Replace this file to re-brand. Keep the same keys; only change values. All colors are 6-digit hex without '#'.",
+    "swap_instructions": "To make a new theme, copy this file, change `theme`, palette, fonts, and logo, then pass --tokens <yourfile>.json to the scripts (or paste the values into the standalone prompt)."
+  },
+  "palette": {
+    "title": "061B4E",
+    "accent": "0268D2",
+    "container": "D6E9FE",
+    "nested": "E7F2FF",
+    "chevron_mid": "9FC2FE",
+    "neutral": "F0F0F2",
+    "text": "4A4A4B",
+    "muted": "6B7280",
+    "border_gray": "DDE4EF",
+    "border_blue": "86C1FD",
+    "white": "FFFFFF"
+  },
+  "gantt_status": {
+    "done": "D6E9FE",
+    "active": "0268D2",
+    "not_started": "F0F0F2",
+    "milestone": "061B4E",
+    "today_line": "0268D2"
+  },
+  "font": {
+    "family": "Microsoft YaHei",
+    "fallbacks": [
+      "Noto Sans CJK SC",
+      "PingFang SC",
+      "SimHei",
+      "sans-serif"
+    ]
+  },
+  "type_scale_pt": {
+    "title": 24,
+    "container_title": 13,
+    "node_title": 12,
+    "body": 11,
+    "caption": 11,
+    "min": 11
+  },
+  "layout": {
+    "slide_w_in": 13.333,
+    "slide_h_in": 7.5,
+    "margin_in": 0.3,
+    "logo": {
+      "file": "logo-default.png",
+      "width_in": 1.5,
+      "aspect_w": 206,
+      "aspect_h": 48,
+      "corner": "bottom-right",
+      "pad_in": 0.24
+    }
+  },
+  "density": {
+    "min_ink_coverage_pct": 30,
+    "min_main_figure_height_ratio": 0.7,
+    "max_blank_square_in": 1.2,
+    "min_shapes_per_content_slide": 40,
+    "text_overflow_tolerance_pct": 3,
+    "min_font_pt": 11
+  }
+}
