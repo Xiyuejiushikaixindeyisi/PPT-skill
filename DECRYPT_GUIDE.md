@@ -1,129 +1,83 @@
-# File Decryption Guide (Chunked Format)
+# File Decryption Guide (Base64 Chunked Format)
 
 ## Encrypted File Info
 
 | Item | Value |
 |------|-------|
-| Original filename | `张曦月-转正答辩-0817.pptx` |
+| Original filename | 张曦月-转正答辩-0817.pptx |
 | Hash algorithm | MD5 (of original filename, UTF-8 encoded) |
-| MD5 hash | `e51db051a1300bb7323239f172e8858b` |
-| Total size | 4,540,312 bytes (~4.5 MB) |
-| Chunk count | 12 |
-| Chunk size | 409,600 bytes (400 KB) |
-| Last chunk size | 34,712 bytes |
-| Location | `assets/encrypted_ppt/` |
-
-## File List
-
-```
-assets/encrypted_ppt/
-├── MANIFEST.txt                              # Metadata
-├── e51db051a1300bb7323239f172e8858b.part000  # Chunk 0
-├── e51db051a1300bb7323239f172e8858b.part001  # Chunk 1
-├── e51db051a1300bb7323239f172e8858b.part002  # Chunk 2
-├── e51db051a1300bb7323239f172e8858b.part003  # Chunk 3
-├── e51db051a1300bb7323239f172e8858b.part004  # Chunk 4
-├── e51db051a1300bb7323239f172e8858b.part005  # Chunk 5
-├── e51db051a1300bb7323239f172e8858b.part006  # Chunk 6
-├── e51db051a1300bb7323239f172e8858b.part007  # Chunk 7
-├── e51db051a1300bb7323239f172e8858b.part008  # Chunk 8
-├── e51db051a1300bb7323239f172e8858b.part009  # Chunk 9
-├── e51db051a1300bb7323239f172e8858b.part010  # Chunk 10
-└── e51db051a1300bb7323239f172e8858b.part011  # Chunk 11 (last, smaller)
-```
+| MD5 hash | e51db051a1300bb7323239f172e8858b |
+| Total size | 4,540,312 bytes (~4.33 MB) |
+| Chunk count | 76 |
+| Chunk size | 60,000 bytes (binary) |
+| Encoding | Base64 |
+| Location | assets/encrypted_ppt/ |
 
 ## How to Decrypt (Restore the PPT)
 
 ### Method 1: Python Script (Recommended)
 
+Save the following as `decrypt.py` and run it in the repo root:
+
 ```python
-import hashlib
-import os
+import base64, os, hashlib
 
-# Configuration
-original_name = '张曦月-转正答辩-0817.pptx'
-name_hash = hashlib.md5(original_name.encode('utf-8')).hexdigest()
-chunk_count = 12
+original_name = "张曦月-转正答辩-0817.pptx"
+name_hash = hashlib.md5(original_name.encode("utf-8")).hexdigest()
+chunk_count = 76
 
-# Verify hash
-assert name_hash == 'e51db051a1300bb7323239f172e8858b', 'Hash mismatch!'
+assert name_hash == "e51db051a1300bb7323239f172e8858b", "Hash mismatch!"
 
-# Reassemble chunks
-output_file = original_name
-with open(output_file, 'wb') as out:
+with open(original_name, "wb") as out:
     for i in range(chunk_count):
-        chunk_file = f'assets/encrypted_ppt/{name_hash}.part{i:03d}'
-        with open(chunk_file, 'rb') as chunk:
-            out.write(chunk.read())
+        chunk_file = "assets/encrypted_ppt/{}.part{:03d}".format(name_hash, i)
+        with open(chunk_file, "rb") as f:
+            out.write(base64.b64decode(f.read()))
 
-# Verify size
 expected_size = 4540312
-actual_size = os.path.getsize(output_file)
-assert actual_size == expected_size, f'Size mismatch: {actual_size} != {expected_size}'
-
-print(f'Successfully restored: {output_file} ({actual_size} bytes)')
+actual_size = os.path.getsize(original_name)
+assert actual_size == expected_size, "Size mismatch: {} != {}".format(actual_size, expected_size)
+print("Restored: {} ({} bytes)".format(original_name, actual_size))
 ```
 
-### Method 2: Shell Script (Git Bash / Linux / macOS)
+### Method 2: One-liner (Git Bash / Linux / macOS)
 
 ```bash
-# After cloning the repo
+git clone https://github.com/Xiyuejiushikaixindeyisi/PPT-skill.git
 cd PPT-skill
-cat assets/encrypted_ppt/e51db051a1300bb7323239f172e8858b.part* > 张曦月-转正答辩-0817.pptx
-echo "Restored: 张曦月-转正答辩-0817.pptx"
-ls -la 张曦月-转正答辩-0817.pptx
+python3 -c "import base64,hashlib; h='e51db051a1300bb7323239f172e8858b'; open('张曦月-转正答辩-0817.pptx','wb').write(b''.join(base64.b64decode(open('assets/encrypted_ppt/{}.part{:03d}'.format(h,i),'rb').read()) for i in range(76))); print('Done')"
 ```
 
 ### Method 3: PowerShell (Windows)
 
 ```powershell
+git clone https://github.com/Xiyuejiushikaixindeyisi/PPT-skill.git
 cd PPT-skill
-$hash = "e51db051a1300bb7323239f172e8858b"
-$output = "张曦月-转正答辩-0817.pptx"
-$stream = [System.IO.File]::Create($output)
-for ($i = 0; $i -lt 12; $i++) {
-    $chunkFile = "assets/encrypted_ppt/$hash.part$($i.ToString('000'))"
-    $bytes = [System.IO.File]::ReadAllBytes($chunkFile)
-    $stream.Write($bytes, 0, $bytes.Length)
-}
-$stream.Close()
-Write-Host "Restored: $output"
+python -c "import base64,hashlib; h='e51db051a1300bb7323239f172e8858b'; open('张曦月-转正答辩-0817.pptx','wb').write(b''.join(base64.b64decode(open('assets/encrypted_ppt/{}.part{:03d}'.format(h,i),'rb').read()) for i in range(76))); print('Done')"
 ```
 
-### Method 4: Command Prompt (Windows)
+## File Structure
 
-```cmd
-cd PPT-skill
-copy /b assets\encrypted_ppt\e51db051a1300bb7323239f172e8858b.part000 + ^
-       assets\encrypted_ppt\e51db051a1300bb7323239f172e8858b.part001 + ^
-       assets\encrypted_ppt\e51db051a1300bb7323239f172e8858b.part002 + ^
-       assets\encrypted_ppt\e51db051a1300bb7323239f172e8858b.part003 + ^
-       assets\encrypted_ppt\e51db051a1300bb7323239f172e8858b.part004 + ^
-       assets\encrypted_ppt\e51db051a1300bb7323239f172e8858b.part005 + ^
-       assets\encrypted_ppt\e51db051a1300bb7323239f172e8858b.part006 + ^
-       assets\encrypted_ppt\e51db051a1300bb7323239f172e8858b.part007 + ^
-       assets\encrypted_ppt\e51db051a1300bb7323239f172e8858b.part008 + ^
-       assets\encrypted_ppt\e51db051a1300bb7323239f172e8858b.part009 + ^
-       assets\encrypted_ppt\e51db051a1300bb7323239f172e8858b.part010 + ^
-       assets\encrypted_ppt\e51db051a1300bb7323239f172e8858b.part011 ^
-       张曦月-转正答辩-0817.pptx
+```
+PPT-skill/
+├── DECRYPT_GUIDE.md
+└── assets/encrypted_ppt/
+    ├── MANIFEST.txt
+    ├── e51db051a1300bb7323239f172e8858b.part000
+    ├── e51db051a1300bb7323239f172e8858b.part001
+    ├── ... (76 parts total)
+    └── e51db051a1300bb7323239f172e8858b.part075
 ```
 
 ## Verification
 
-After reassembly, verify the file integrity:
-
 ```bash
-# Check file size (should be 4540312 bytes)
 ls -la 张曦月-转正答辩-0817.pptx
-
-# Compute MD5 of the restored file content
-md5sum 张曦月-转正答辩-0817.pptx
+# Expected: 4540312 bytes
 ```
 
 ## Notes
 
-- This is a simple file disguise (filename hash + extension change), not cryptographic encryption.
-- The file content is unchanged; only the filename is hashed and the file is split into chunks.
-- The filename hash serves as a lookup key: `MD5("张曦月-转正答辩-0817.pptx") = e51db051a1300bb7323239f172e8858b`
-- Anyone with access to this repo and this guide can restore the original PPT.
+- Filename hash: MD5("张曦月-转正答辩-0817.pptx") = e51db051a1300bb7323239f172e8858b
+- Each chunk is base64-encoded binary data
+- This is file disguise, not cryptographic encryption
