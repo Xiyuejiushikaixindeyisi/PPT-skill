@@ -1,0 +1,7 @@
+original_filename: 张曦月-转正答辩-0817.pptx
+md5_hash: e51db051a1300bb7323239f172e8858b
+total_size: 4540312
+chunk_count: 12
+chunk_size: 409600
+original_extension: .pptx
+disguised_extension: .bin
